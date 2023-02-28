@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import * as css from './style/style';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+import { TodoType } from './AppContainer';
+import Input from './components/TodoInput';
+import List from './components/TodoList';
+type propsType = {
+    todoList: Array<TodoType>;
+    addTodo: (
+        uid: string,
+        title: string,
+        body: string,
+        date: string,
+        sticker: string,
+        done: boolean
+    ) => void;
+    updateTodo: (todo: TodoType) => void;
+    deleteTodo: (todo: TodoType) => void;
+    sortTodo: (sortType: string) => void;
+};
+function App(props: propsType) {
+    return (
+        <css.Wrapper className='wrap'>
+            <css.Inner className='inner'>
+                <css.AppTitle>TodoList App</css.AppTitle>
+            </css.Inner>
+            <Input
+                addTodo={props.addTodo}
+                // updateTodo={props.updateTodo}
+                // deleteTodo={props.deleteTodo}
+            />
+            <List
+                todoList={props.todoList}
+                updateTodo={props.updateTodo}
+                deleteTodo={props.deleteTodo}
+            />
+        </css.Wrapper>
+    );
 }
 
-export default App
+export default App;
