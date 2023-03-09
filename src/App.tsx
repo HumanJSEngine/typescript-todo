@@ -1,39 +1,43 @@
 import * as css from './style/style';
+import { FormOutlined } from '@ant-design/icons';
+import { CallBacksType, StatesType } from './AppContainer';
+import { Routes, Route } from 'react-router-dom';
+import { Todo } from './pages/Todo';
+import NotFound from './pages/NotFound';
+import TodoEdit from './pages/TodoEdit';
 
-import { TodoType } from './AppContainer';
-import Input from './components/TodoInput';
-import List from './components/TodoList';
 type propsType = {
-    todoList: Array<TodoType>;
-    addTodo: (
-        uid: string,
-        title: string,
-        body: string,
-        date: string,
-        sticker: string,
-        done: boolean
-    ) => void;
-    updateTodo: (todo: TodoType) => void;
-    deleteTodo: (todo: TodoType) => void;
-    sortTodo: (sortType: string) => void;
+    states: StatesType;
+    callBacks: CallBacksType;
 };
-function App(props: propsType) {
+
+function App({ states, callBacks }: propsType) {
     return (
-        <css.Wrapper className='wrap'>
-            <css.Inner className='inner'>
-                <css.AppTitle>TodoList App</css.AppTitle>
-            </css.Inner>
-            <Input
-                addTodo={props.addTodo}
-                // updateTodo={props.updateTodo}
-                // deleteTodo={props.deleteTodo}
-            />
-            <List
-                todoList={props.todoList}
-                updateTodo={props.updateTodo}
-                deleteTodo={props.deleteTodo}
-            />
-        </css.Wrapper>
+            <css.Wrapper className='wrap'>
+                <css.Inner className='inner'>
+                    <css.AppTitle>
+                        <FormOutlined />
+                        TodoList App
+                    </css.AppTitle>
+                </css.Inner>
+                {/* 라우팅 영역 */}
+                <Routes>
+                    {/* 첫화면 : 입력창, 목록창 */}
+                    <Route
+                        path='/'
+                        element={<Todo states={states} callBacks={callBacks} />}
+                    />
+                    {/* 수정화면 : 편집창 */}
+                    <Route
+                        path='/edit/:uid'
+                        element={
+                            <TodoEdit states={states} callBacks={callBacks} />
+                        }
+                    />
+                    {/* 주소오류 */}
+                    <Route path='*' element={<NotFound />} />
+                </Routes>
+            </css.Wrapper>
     );
 }
 
